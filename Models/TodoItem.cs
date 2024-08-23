@@ -1,6 +1,11 @@
-public class ToDoItem
+namespace ToDoApi.Models
 {
-    public int Id { get; set; }
-    public string Title { get; set; }
-    public bool IsCompleted { get; set; }
+
+    public class ToDoItem
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public bool IsCompleted { get; set; }
+    }
 }
+
