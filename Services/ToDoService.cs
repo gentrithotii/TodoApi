@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using ToDoApi.Data;
 using ToDoApi.Models;
@@ -20,9 +21,14 @@ namespace ToDoApi.Services
             return await _context.ToDoItems.ToListAsync();
         }
 
-        public async Task<ToDoItem> GetToDoByIdAsync(int id)
+        public async Task<ToDoItem?> GetToDoByIdAsync(int id)
         {
-            return await _context.ToDoItems.FindAsync(id);
+            var item = await _context.ToDoItems.FindAsync(id);
+            if (item == null)
+            {
+                return null;
+            }
+            return item;
         }
 
         public async Task<ToDoItem> AddToDoAsync(ToDoItem item)
