@@ -1,5 +1,6 @@
 using ToDoApi.Data;
 using ToDoApi.Models;
+using ToDoApi.Models.Dtos;
 
 namespace ToDoApi.Services
 {
@@ -22,7 +23,7 @@ namespace ToDoApi.Services
             User user = new User
             {
                 Email = requestUser.Email,
-                Password = requestUser.Password
+                PasswordHash = requestUser.Password
             };
 
             await _context.AddAsync(user);

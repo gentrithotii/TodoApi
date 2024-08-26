@@ -12,7 +12,7 @@ namespace ToDoApi.Models
 
         [Required]
         [StringLength(200)]
-        public required string Password { get; set; }
+        public required string PasswordHash { get; set; }
         public List<ToDoItem> ToDoItems { get; set; } = [];
     }
 }

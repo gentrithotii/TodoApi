@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ToDoApi.Models
+namespace ToDoApi.Models.Dtos
 {
     public class UserDto
     {
@@ -11,6 +11,6 @@ namespace ToDoApi.Models
         [Required]
         [StringLength(200)]
         public required string Password { get; set; }
-        public List<ToDoItem> ToDoItems { get; set; } = [];
+        // public List<ToDoItem> ToDoItems { get; set; } = [];
     }
 }
