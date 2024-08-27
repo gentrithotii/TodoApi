@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ToDoApi.Data;
 using ToDoApi.Models;
@@ -42,14 +43,13 @@ namespace ToDoApi.Services
             return user;
         }
 
-        public async Task<ActionResult<User>> LogInUser(UserDto requestUser)
+        public async Task<string> LogInUser(UserDto requestUser)
         {
-
             if (requestUser == null)
             {
                 throw new Exception("No User found ");
             }
-            var foundUser = await _context.Users.FindAsync(requestUser.Email);
+            var foundUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == requestUser.Email);
 
             if (foundUser.Email != requestUser.Email)
             {
@@ -61,7 +61,7 @@ namespace ToDoApi.Services
                 throw new Exception("Wrong Password "); ;
             }
 
-            return foundUser;
+            return CreateToken(foundUser);
         }
 
         private string CreateToken(User user)

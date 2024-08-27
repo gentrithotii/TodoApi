@@ -29,14 +29,15 @@ namespace ToDoApi.Controllers
         }
 
 
-        // public async Task<ActionResult<User>> LogInUser(UserDto user)
-        // {
-        //     if (user == null)
-        //     {
-        //         return BadRequest(user);
-        //     }
-        //     var test = await _userService.LogInUser(user);
-        //     var token = await _
-        // }
+        public async Task<ActionResult<User>> LogInUser(UserDto user)
+        {
+            if (user == null)
+            {
+                return BadRequest(user);
+            }
+            var token = await _userService.LogInUser(user);
+
+            return Ok(new { Token = token });
+        }
     }
 }
