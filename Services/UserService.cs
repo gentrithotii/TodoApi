@@ -47,18 +47,22 @@ namespace ToDoApi.Services
         {
             if (requestUser == null)
             {
-                throw new Exception("No User found ");
+                throw new ArgumentNullException(nameof(requestUser), "Request user data is required.");
             }
             var foundUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == requestUser.Email);
 
+            if (foundUser == null)
+            {
+                throw new Exception("User not found");
+            }
             if (foundUser.Email != requestUser.Email)
             {
-                throw new Exception("No User found ");
+                throw new Exception("Email does not match");
             }
 
             if (!BCrypt.Net.BCrypt.Verify(requestUser.PasswordHash, foundUser.PasswordHash))
             {
-                throw new Exception("Wrong Password "); ;
+                throw new Exception("Password does not mach");
             }
 
             return CreateToken(foundUser);
@@ -74,7 +78,7 @@ namespace ToDoApi.Services
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value!));
 
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
             var token = new JwtSecurityToken(
                 claims: claims,
