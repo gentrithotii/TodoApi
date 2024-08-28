@@ -29,7 +29,7 @@ namespace ToDoApi.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<User>> LogInUser(UserDto user)
+        public async Task<ActionResult<User>> LogInUserAsync(UserDto user)
         {
             if (user == null)
             {
