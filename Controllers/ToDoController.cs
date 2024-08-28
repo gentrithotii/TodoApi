@@ -1,21 +1,22 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ToDoApi.Models;
-using ToDoApi.Services;
+using ToDoApi.Services.InterfaceServices;
 
 namespace ToDoApi.Controllers
 {
-
     [Route("api/[controller]")]
     [ApiController]
     public class ToDoController : ControllerBase
     {
-        private readonly ToDoService _toDoService;
+        private readonly IToDoService _toDoService;
 
-        public ToDoController(ToDoService toDoService)
+        public ToDoController(IToDoService toDoService)
         {
             _toDoService = toDoService;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ToDoItem>>> GetAll()
         {
@@ -64,5 +65,4 @@ namespace ToDoApi.Controllers
             return NoContent();
         }
     }
-
 }
