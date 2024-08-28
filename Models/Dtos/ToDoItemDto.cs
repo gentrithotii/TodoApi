@@ -1,9 +1,6 @@
-using System.Text.Json.Serialization;
-
-namespace ToDoApi.Models
+namespace ToDoApi.Models.Dtos
 {
-
-    public class ToDoItem
+    public class ToDoItemDto
     {
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
@@ -12,8 +9,5 @@ namespace ToDoApi.Models
 
         public int UserId { get; set; }
 
-        [JsonIgnore]
-        public User? User { get; set; }
     }
 }
-
