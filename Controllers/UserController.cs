@@ -12,7 +12,7 @@ namespace ToDoApi.Controllers
     {
         private readonly IUserService _userService;
 
-        public UserController(UserService userSverice)
+        public UserController(IUserService userSverice)
         {
             _userService = userSverice;
         }
