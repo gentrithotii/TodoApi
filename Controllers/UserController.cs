@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using ToDoApi.Models;
 using ToDoApi.Models.Dtos;
 using ToDoApi.Services;
+using ToDoApi.Services.InterfaceServices;
 
 namespace ToDoApi.Controllers
 {
@@ -9,7 +10,7 @@ namespace ToDoApi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
         public UserController(UserService userSverice)
         {

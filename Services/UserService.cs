@@ -7,12 +7,13 @@ using Microsoft.IdentityModel.Tokens;
 using ToDoApi.Data;
 using ToDoApi.Models;
 using ToDoApi.Models.Dtos;
+using ToDoApi.Services.InterfaceServices;
 
 
 
 namespace ToDoApi.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly ToDoContext _context;
         private readonly IConfiguration _configuration;
