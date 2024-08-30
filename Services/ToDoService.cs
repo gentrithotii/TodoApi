@@ -30,6 +30,13 @@ namespace ToDoApi.Services
             return item;
         }
 
+        public async Task<List<ToDoItem>> GetToDoItemsForUserAsync(int userId)
+        {
+            var items = await _context.ToDoItems.Where((item) => item.UserId == userId).ToListAsync();
+
+            return items;
+        }
+
         public async Task<ToDoItem> AddToDoAsync(ToDoItem item)
         {
             _context.ToDoItems.Add(item);

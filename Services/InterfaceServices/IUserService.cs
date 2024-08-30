@@ -7,6 +7,7 @@ namespace ToDoApi.Services.InterfaceServices
     {
         Task<User> CreateUserAsync(UserDto reqUser);
         Task<string> LogInUser(UserDto reqUser);
+
     }
 }
 

@@ -23,6 +23,14 @@ namespace ToDoApi.Controllers
             return Ok(await _toDoService.GetAllToDosAsync());
         }
 
+        [HttpGet("todos{id}")]
+        public async Task<ActionResult<IEnumerable<ToDoItem>>> GetToDoItemsForUser(int id)
+        {
+            var item = await _toDoService.GetToDoItemsForUserAsync(id);
+
+            return Ok(item);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<ToDoItem>> GetById(int id)
         {
