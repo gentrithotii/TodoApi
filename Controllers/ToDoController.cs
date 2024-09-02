@@ -1,6 +1,8 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ToDoApi.Models;
+using ToDoApi.Models.Dtos;
 using ToDoApi.Services.InterfaceServices;
 
 namespace ToDoApi.Controllers
@@ -41,6 +43,19 @@ namespace ToDoApi.Controllers
                 return NotFound();
             }
             return Ok(item);
+        }
+
+        [HttpPost("AddToDoItem")]
+        public async Task<IActionResult> AddToDoItem([FromBody] ToDoItem reqToDoItem)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+            {
+                return Unauthorized("Not Authorized !");
+            }
+
+            var newToDoItem = await _toDoService.AddToDoItemForUserAsync(userId, reqToDoItem);
+            return Ok(newToDoItem);
         }
 
         [HttpPost]
