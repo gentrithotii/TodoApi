@@ -26,17 +26,17 @@ namespace ToDoApi.Controllers
             }
             var createdUser = await _userService.CreateUserAsync(user);
 
-            return Ok(createdUser);
+            return CreatedAtAction(nameof(RegisterUserAsync), new { id = createdUser.UserId }, createdUser);
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<User>> LogInUserAsync(UserDto user)
         {
-            if (user == null)
-            {
-                return BadRequest(user);
-            }
             var token = await _userService.LogInUser(user);
+            if (token == null)
+            {
+                return Unauthorized();
+            }
 
             return Ok(new { Token = token });
         }
