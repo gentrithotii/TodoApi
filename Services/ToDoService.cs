@@ -1,3 +1,6 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ToDoApi.Data;
 using ToDoApi.Models;
@@ -28,6 +31,34 @@ namespace ToDoApi.Services
                 return null;
             }
             return item;
+        }
+
+        public async Task<ToDoItem?> AddToDoItemForUserAsync(int userId, ToDoItem reqToDoItem)
+        {
+            var userExists = await _context.Users.AnyAsync(u => u.UserId == userId);
+            if (!userExists)
+            {
+                throw new InvalidOperationException("User does not exist");
+            }
+
+            ToDoItem item = new()
+            {
+                Title = reqToDoItem.Title,
+                Description = reqToDoItem.Description,
+                IsCompleted = reqToDoItem.IsCompleted,
+                UserId = userId
+            };
+
+            _context.ToDoItems.Add(item);
+            await _context.SaveChangesAsync();
+            return item;
+        }
+
+        public async Task<List<ToDoItem>> GetToDoItemsForUserAsync(int userId)
+        {
+            var items = await _context.ToDoItems.Where((item) => item.UserId == userId).ToListAsync();
+
+            return items;
         }
 
         public async Task<ToDoItem> AddToDoAsync(ToDoItem item)
