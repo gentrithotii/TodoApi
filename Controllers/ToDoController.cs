@@ -51,8 +51,9 @@ namespace ToDoApi.Controllers
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
             {
-                return Unauthorized("Not Authorized !");
+                return Unauthorized("No Access!");
             }
+
 
             var newToDoItem = await _toDoService.AddToDoItemForUserAsync(userId, reqToDoItem);
             return Ok(newToDoItem);
