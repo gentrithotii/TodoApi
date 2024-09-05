@@ -53,9 +53,8 @@ namespace ToDoApi.Controllers
                 return Unauthorized("No Access!");
             }
 
-
             var newToDoItem = await _toDoService.AddToDoItemForUserAsync(userId, reqToDoItem);
-            return Ok(newToDoItem);
+            return CreatedAtAction(nameof(AddToDoItem), new { id = newToDoItem.Id }, newToDoItem);
         }
 
         [HttpPost]

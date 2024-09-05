@@ -36,7 +36,7 @@ namespace ToDoApi.Services
             var userExists = await _context.Users.AnyAsync(u => u.UserId == reqUserId);
             if (!userExists)
             {
-                return null;
+                throw new InvalidOperationException("User does not exist");
             }
 
             ToDoItem item = new()
