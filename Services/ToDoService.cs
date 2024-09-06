@@ -34,6 +34,7 @@ namespace ToDoApi.Services
         public async Task<ToDoItem> AddToDoItemForUserAsync(int reqUserId, ToDoItem reqToDoItem)
         {
             var userExists = await _context.Users.AnyAsync(u => u.UserId == reqUserId);
+
             if (!userExists) throw new InvalidOperationException("User does not exist");
 
             ToDoItem item = new()
@@ -44,7 +45,9 @@ namespace ToDoApi.Services
                 UserId = reqUserId
             };
             _context.ToDoItems.Add(item);
+
             await _context.SaveChangesAsync();
+
             return item;
         }
 

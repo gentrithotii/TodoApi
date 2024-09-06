@@ -9,10 +9,12 @@ namespace ToDoApi.Models
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public bool IsCompleted { get; set; }
+        // DateTime DayToComplete { get; set; }
 
         public int UserId { get; set; }
         [JsonIgnore]
         public User? User { get; set; }
+
     }
 }
 
