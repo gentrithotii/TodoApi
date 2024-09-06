@@ -25,10 +25,12 @@ namespace ToDoApi.Services
 
         public async Task<User> CreateUserAsync(UserDto requestUser)
         {
-            if (requestUser == null)
-            {
-                throw new ArgumentException(null, nameof(requestUser));
-            }
+            var checkIfUserExist = await _context.Users.AnyAsync((u) => u.Email == requestUser.Email);
+
+            if (!checkIfUserExist) throw new ArgumentException("User already exists.");
+
+            if (requestUser == null) throw new ArgumentException(null, nameof(requestUser));
+
 
             string hashPassword = BCrypt.Net.BCrypt.HashPassword(requestUser.PasswordHash);
 
@@ -45,32 +47,19 @@ namespace ToDoApi.Services
 
         public async Task<string> LogInUser(UserDto requestUser)
         {
-            if (requestUser == null)
-            {
-                throw new ArgumentNullException(nameof(requestUser), "Request user data is required.");
-            }
-            var foundUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == requestUser.Email);
+            if (requestUser == null) throw new ArgumentNullException(nameof(requestUser), "Request user data is required.");
 
-            if (foundUser == null)
-            {
-                throw new Exception("User not found");
-            }
-            if (foundUser.Email != requestUser.Email)
-            {
-                throw new Exception("Email does not match");
-            }
+            var foundUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == requestUser.Email) ?? throw new Exception("User not found");
 
-            if (!BCrypt.Net.BCrypt.Verify(requestUser.PasswordHash, foundUser.PasswordHash))
-            {
-                throw new Exception("Password does not mach");
-            }
+            if (foundUser.Email != requestUser.Email) throw new Exception("Email does not match");
+
+            if (!BCrypt.Net.BCrypt.Verify(requestUser.PasswordHash, foundUser.PasswordHash)) throw new Exception("Password does not mach");
 
             return CreateToken(foundUser);
         }
 
         private string CreateToken(User user)
         {
-
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),

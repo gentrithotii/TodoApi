@@ -20,10 +20,8 @@ namespace ToDoApi.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<User>> RegisterUserAsync(UserDto user)
         {
-            if (user == null)
-            {
-                return BadRequest(user);
-            }
+            if (user == null) return BadRequest(user);
+
             var createdUser = await _userService.CreateUserAsync(user);
 
             return CreatedAtAction(nameof(RegisterUserAsync), new { id = createdUser.UserId }, createdUser);
