@@ -24,7 +24,7 @@ namespace ToDoApi.Controllers
 
             var createdUser = await _userService.CreateUserAsync(user);
 
-            return CreatedAtAction(nameof(RegisterUserAsync), new { id = createdUser.UserId }, createdUser);
+            return Ok(createdUser);
         }
 
         [HttpPost("login")]

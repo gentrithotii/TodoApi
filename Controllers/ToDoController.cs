@@ -26,9 +26,9 @@ namespace ToDoApi.Controllers
         }
 
         [HttpGet("todos{id}")]
-        public async Task<ActionResult<IEnumerable<ToDoItem>>> GetToDoItemsForUser(int id)
+        public async Task<ActionResult<IEnumerable<ToDoItem>>> GetToDoItemsForUser(int userId)
         {
-            var item = await _toDoService.GetToDoItemsForUserAsync(id);
+            var item = await _toDoService.GetToDoItemsForUserAsync(userId);
 
             return Ok(item);
         }
@@ -67,7 +67,6 @@ namespace ToDoApi.Controllers
         public async Task<IActionResult> Update(int id, ToDoItem item)
         {
             if (id != item.Id) return BadRequest();
-
 
             var updatedItem = await _toDoService.UpdateToDoAsync(item);
 

@@ -27,7 +27,7 @@ namespace ToDoApi.Services
         {
             var checkIfUserExist = await _context.Users.AnyAsync((u) => u.Email == requestUser.Email);
 
-            if (!checkIfUserExist) throw new ArgumentException("User already exists.");
+            if (checkIfUserExist) throw new ArgumentException("User already exists.");
 
             if (requestUser == null) throw new ArgumentException(null, nameof(requestUser));
 
