@@ -43,7 +43,7 @@ namespace ToDoApi.Services
                 IsCompleted = reqToDoItem.IsCompleted,
                 UserId = reqUserId
             };
-
+            _context.ToDoItems.Add(item);
             await _context.SaveChangesAsync();
             return item;
         }
