@@ -58,18 +58,21 @@ namespace ToDoApi.Services
             return items;
         }
 
-        public async Task<ToDoItem> AddToDoAsync(ToDoItem item)
+        public async Task<ToDoItem?> UpdateToDoAsync(int userId, int toDoId, ToDoItem updatedItem)
         {
-            _context.ToDoItems.Add(item);
-            await _context.SaveChangesAsync();
-            return item;
-        }
 
-        public async Task<ToDoItem> UpdateToDoAsync(ToDoItem item)
-        {
-            _context.Entry(item).State = EntityState.Modified;
+            var existingItem = await _context.ToDoItems.FirstOrDefaultAsync(item => item.Id == toDoId && item.UserId == userId);
+
+            if (existingItem == null) return null;
+
+            existingItem.Title = updatedItem.Title ?? existingItem.Title;
+            existingItem.Description = updatedItem.Description ?? existingItem.Description;
+            existingItem.IsCompleted = updatedItem.IsCompleted;
+
+            _context.Entry(existingItem).State = EntityState.Modified;
+
             await _context.SaveChangesAsync();
-            return item;
+            return existingItem;
         }
 
         public async Task<bool> DeleteToDoByIdAsync(int id)

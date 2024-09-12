@@ -8,8 +8,7 @@ namespace ToDoApi.Services.InterfaceServices
         Task<ToDoItem?> GetToDoByIdAsync(int id);
         Task<List<ToDoItem>> GetToDoItemsForUserAsync(int user);
         Task<ToDoItem> AddToDoItemForUserAsync(int user, ToDoItem toDoItem);
-        Task<ToDoItem> AddToDoAsync(ToDoItem item);
-        Task<ToDoItem> UpdateToDoAsync(ToDoItem item);
+        Task<ToDoItem?> UpdateToDoAsync(int userId, int toDoId, ToDoItem updatedItem);
         Task<bool> DeleteToDoByIdAsync(int id);
     }
 }
