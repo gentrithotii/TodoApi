@@ -17,6 +17,16 @@ namespace ToDoApi.Controllers
             _toDoService = toDoService;
         }
 
+        private int? GetUserIdFromClaims()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+            {
+                return null;
+            }
+            return userId;
+        }
+
         [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ToDoItem>>> GetAll()
@@ -24,21 +34,19 @@ namespace ToDoApi.Controllers
             return Ok(await _toDoService.GetAllToDosAsync());
         }
 
-        [HttpGet("Todos/{id}")]
+        [HttpGet("Todos:{id}")]
         public async Task<ActionResult<IEnumerable<ToDoItem>>> GetToDoItemsForUser(int id)
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = GetUserIdFromClaims();
 
-            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userIds)) return Unauthorized("No Access!");
+            if (userId == null || userId != id) return Unauthorized("No Access!");
 
-            if (userIds != id) return Unauthorized("No Access !");
-
-            var item = await _toDoService.GetToDoItemsForUserAsync(userIds);
+            var item = await _toDoService.GetToDoItemsForUserAsync(userId.Value);
 
             return Ok(item);
         }
 
-        [HttpGet("/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<ToDoItem>> GetById(int id)
         {
             var item = await _toDoService.GetToDoByIdAsync(id);
@@ -48,37 +56,30 @@ namespace ToDoApi.Controllers
             return Ok(item);
         }
 
-        [HttpPost("/AddToDoItem")]
+        [HttpPost("AddToDoItem")]
         public async Task<IActionResult> AddToDoItem([FromBody] ToDoItem reqToDoItem)
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId)) return Unauthorized("No Access!");
+            var userId = GetUserIdFromClaims();
 
-            var newToDoItem = await _toDoService.AddToDoItemForUserAsync(userId, reqToDoItem);
+            if (userId == null) return Unauthorized("No Access!");
+
+            var newToDoItem = await _toDoService.AddToDoItemForUserAsync(userId.Value, reqToDoItem);
 
             return Ok(newToDoItem);
         }
 
-        // [HttpPost]
-        // public async Task<ActionResult<ToDoItem>> Create(ToDoItem item)
-        // {
-        //     var createdItem = await _toDoService.AddToDoAsync(item);
-
-        //     return CreatedAtAction(nameof(GetById), new { id = createdItem.Id }, createdItem);
-        // }
-
-        [HttpPut("/{id}")]
-        public async Task<IActionResult> Update(int id, ToDoItem item)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] ToDoItem item)
         {
-            if (id != item.Id) return BadRequest();
+            if (id != item.Id) return BadRequest("ID mismatch");
 
-            var updatedItem = await _toDoService.UpdateToDoAsync(item);
-
+            var updatedItem = await _toDoService.UpdateToDoAsync(id, item.Id, item);
             return Ok(updatedItem);
         }
 
-        [HttpDelete("/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var success = await _toDoService.DeleteToDoByIdAsync(id);

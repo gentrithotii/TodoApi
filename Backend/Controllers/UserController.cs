@@ -17,7 +17,7 @@ namespace ToDoApi.Controllers
             _userService = userSverice;
         }
 
-        [HttpPost("register")]
+        [HttpPost("Register")]
         public async Task<ActionResult<User>> RegisterUserAsync(UserDto user)
         {
             if (user == null) return BadRequest(user);
@@ -27,7 +27,7 @@ namespace ToDoApi.Controllers
             return Ok(createdUser);
         }
 
-        [HttpPost("login")]
+        [HttpPost("Login")]
         public async Task<ActionResult<User>> LogInUserAsync(UserDto user)
         {
             var token = await _userService.LogInUser(user);
