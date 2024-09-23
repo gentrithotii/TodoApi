@@ -6,9 +6,11 @@ function App() {
 
   return (
     <BrowserRouter>
+      {/* <Providors> */}
       <Routes>
         <Route path='/' element={<DemoPage />} />
       </Routes>
+      {/* <Providor /> */}
     </BrowserRouter>
   )
 }
