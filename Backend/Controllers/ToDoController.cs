@@ -34,6 +34,7 @@ namespace ToDoApi.Controllers
             return Ok(await _toDoService.GetAllToDosAsync());
         }
 
+        [Authorize]
         [HttpGet("Todos:{id}")]
         public async Task<ActionResult<IEnumerable<ToDoItem>>> GetToDoItemsForUser(int id)
         {
@@ -46,6 +47,7 @@ namespace ToDoApi.Controllers
             return Ok(item);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<ToDoItem>> GetById(int id)
         {
@@ -56,6 +58,7 @@ namespace ToDoApi.Controllers
             return Ok(item);
         }
 
+        [Authorize]
         [HttpPost("AddToDoItem")]
         public async Task<IActionResult> AddToDoItem([FromBody] ToDoItem reqToDoItem)
         {
